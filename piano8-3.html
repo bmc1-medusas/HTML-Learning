@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Piano Keyboard</title>
+    <style>
+      body {
+        background: linear-gradient(to top, #007bff, #f0f8ff);
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      .frame {
+        width: 500px;
+        height: 500px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .piano {
+        display: flex;
+      }
+
+      .piano-key {
+        display: inline-block;
+        width: 40px;
+        height: 200px;
+        background-color: white;
+        border: 1px solid black;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .piano-key:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .black-key {
+        position: relative;
+        width: 30px;
+        height: 120px;
+        background-color: black;
+        margin-top: -120px;
+        margin-left: -15px;
+        z-index: 1;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .black-key:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .copyright {
+        margin-top: 20px;
+        font-size: 14px;
+        text-align: center;
+      }
+    </style>
+    <script>
+      var audioContext;
+      var oscillators = {};
+
+      function init() {
+        // Create an AudioContext instance
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      function playTone(frequency) {
+        // Check if an oscillator is already running for the given frequency
+        if (oscillators[frequency]) {
+          return; // Return if already playing
+        }
+
+        // Create a new OscillatorNode
+        var oscillator = audioContext.createOscillator();
+        oscillator.frequency.value = frequency;
+        oscillator.connect(audioContext.destination);
+
+        // Start the oscillator
+        oscillator.start();
+
+        // Store the oscillator in the oscillators object
+        oscillators[frequency] = oscillator;
+      }
+
+      function stopAllTones() {
+        // Stop and disconnect all oscillators
+        for (var frequency in oscillators) {
+          oscillators[frequency].stop();
+          oscillators[frequency].disconnect();
+        }
+
+        // Clear the oscillators object
+        oscillators = {};
+      }
+    </script>
+  </head>
+  <body onload="init()">
+    <div class="frame">
+      <div class="piano">
+        <div class="piano-key" onmousedown="playTone(261.63)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key black-key" onmousedown="playTone(277.18)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key" onmousedown="playTone(293.66)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key black-key" onmousedown="playTone(311.13)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key" onmousedown="playTone(329.63)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key" onmousedown="playTone(349.23)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key black-key" onmousedown="playTone(369.99)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key" onmousedown="playTone(392.00)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key black-key" onmousedown="playTone(415.30)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key" onmousedown="playTone(440.00)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key black-key" onmousedown="playTone(466.16)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key" onmousedown="playTone(493.88)" onmouseup="stopAllTones()"></div>
+        <div class="piano-key" onmousedown="playTone(523.25)" onmouseup="stopAllTones()"></div>
+      </div>
+      <div class="copyright">
+        &copy; 2023 BMC1 Piano
+      </div>
+    </div>
+  </body>
+</html>
